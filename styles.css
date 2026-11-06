@@ -1,0 +1,222 @@
+html, body { margin: 0; background: #0d0b22; color: #f3e9d2; }
+/* Reserve the scrollbar's space even when the page doesn't scroll, so the
+   window doesn't jump sideways when a taller screen adds a scrollbar. */
+html { scrollbar-gutter: stable; }
+* { box-sizing: border-box; }
+a { color: #ffcf4a; }
+a:hover { color: #5ee0e6; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button:focus-visible { outline: 3px solid #5ee0e6; outline-offset: 3px; }
+
+@keyframes blink   { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes bob     { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
+@keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 0) } 15% { opacity: 1 } 100% { opacity: 0; transform: translate(-50%, -44px) } }
+@keyframes popIn   { 0% { transform: scale(.7); opacity: 0 } 100% { transform: scale(1); opacity: 1 } }
+
+.ps { font-family: 'Press Start 2P', monospace; }
+
+.app {
+  position: relative; min-height: 100vh; min-height: 100dvh; overflow-x: hidden;
+  font-family: 'Pixelify Sans', monospace; color: #f3e9d2; background: #0d0b22;
+}
+.sky {
+  position: fixed; inset: 0; z-index: 0;
+  background-size: cover; background-position: center bottom; image-rendering: pixelated;
+}
+main {
+  position: relative; z-index: 1; min-height: 100vh; min-height: 100dvh;
+  /* Anchored to a fixed top offset rather than vertically centered: every
+     screen and question starts at the same spot whether or not it scrolls. */
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: clamp(28px, 8vh, 88px) 18px 56px;
+}
+.window {
+  position: relative; width: 100%; max-width: 720px;
+  background: #241f4a; border: 4px solid #0a0818;
+  box-shadow: inset 4px 4px 0 #3d3678, inset -4px -4px 0 #171334,
+              0 0 0 4px #f3e9d2, 0 0 0 8px #0a0818, 14px 14px 0 8px rgba(5,4,15,.55);
+  padding: clamp(20px, 4vw, 36px);
+}
+
+/* ---------- HUD ---------- */
+.hud { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 22px; }
+.hud-left { font-size: 10px; letter-spacing: 1px; color: #a79fd0; line-height: 1.6; }
+.btn-sfx {
+  font-size: 10px; padding: 8px 10px; background: #171334; color: #f3e9d2;
+  border: 3px solid #0a0818; box-shadow: 3px 3px 0 #0a0818;
+}
+
+/* ---------- Shared buttons ---------- */
+.btn-primary {
+  background: #ffcf4a; color: #1a1530; border: 4px solid #0a0818;
+  box-shadow: inset -4px -4px 0 #c9971f, inset 4px 4px 0 #ffe9a3, 6px 6px 0 #0a0818;
+}
+.btn-secondary {
+  flex: 1 1 170px; font-size: 10px; padding: 15px 12px;
+  background: #3d3678; color: #f3e9d2; border: 4px solid #0a0818; box-shadow: 4px 4px 0 #0a0818;
+}
+.hint { font-size: 9px; color: #a79fd0; }
+
+/* ---------- 01 Title ---------- */
+.screen-title { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 26px; }
+.logo { display: flex; flex-direction: column; align-items: center; gap: 16px; line-height: 1.1; }
+.logo-1 { font-size: clamp(14px, 2.6vw, 20px); color: #ffcf4a; text-shadow: 3px 3px 0 #0a0818; }
+.logo-2 { font-size: clamp(30px, 8.4vw, 64px); color: #ef4b5a; text-shadow: 0 4px 0 #9e2433, 0 8px 0 #0a0818; }
+.logo-3 { font-size: clamp(18px, 4vw, 32px); color: #f3e9d2; text-shadow: 0 4px 0 #0a0818; margin-top: 6px; }
+.parade { width: 100%; overflow: hidden; background: #171334; border: 4px solid #0a0818; padding-top: 14px; }
+.parade-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+.parade-item { padding-right: 16px; }
+.parade-item img {
+  display: block; width: 66px; height: 66px; image-rendering: pixelated;
+  animation: bob .5s steps(2) infinite;
+}
+.grass {
+  height: 14px; border-top: 4px solid #5fae47;
+  background: repeating-linear-gradient(90deg, #3a7d3a 0 8px, #2f6a31 8px 16px);
+}
+.tagline { margin: 0; max-width: 440px; font-size: 21px; line-height: 1.4; text-wrap: pretty; }
+.tagline span { font-size: 15px; color: #a79fd0; }
+.btn-start { font-size: 16px; padding: 18px 28px; display: flex; gap: 14px; align-items: center; }
+.blink { animation: blink 1s steps(1) infinite; }
+
+/* ---------- 02 Question ---------- */
+.screen-quiz { display: flex; flex-direction: column; gap: 20px; }
+.progress { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.pip { height: 14px; border: 3px solid #0a0818; }
+.kind { font-size: 10px; padding: 7px 10px; color: #0a0818; border: 3px solid #0a0818; }
+.question {
+  background: #f3e9d2; color: #1a1530; border: 4px solid #0a0818;
+  box-shadow: inset -4px -4px 0 #cfc3a6, 6px 6px 0 #0a0818;
+  padding: 20px 22px; font-size: clamp(21px, 3.4vw, 28px); font-weight: 700; line-height: 1.25; text-wrap: pretty;
+  /* Always at least two lines tall, so one- and two-line questions keep the
+     answer buttons in the same place. (padding 40px + border 8px) */
+  min-height: calc(2 * 1.25em + 48px); display: flex; align-items: center;
+}
+/* On phones the longest question wraps to three lines. */
+@media (max-width: 480px) { .question { min-height: calc(3 * 1.25em + 48px); } }
+.answers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+.answer {
+  position: relative; display: flex; align-items: center; gap: 14px; text-align: left;
+  padding: 14px 16px; min-height: 76px;
+  background: #1a1638; color: #f3e9d2;
+  border: 4px solid #0a0818; box-shadow: 4px 4px 0 #0a0818;
+  font-family: 'Pixelify Sans', monospace; font-size: 19px; line-height: 1.25;
+}
+.letter {
+  flex: none; width: 34px; height: 34px; display: grid; place-items: center;
+  background: #0a0818; color: #ffcf4a; font-size: 12px;
+}
+.pop {
+  position: absolute; left: 50%; top: -8px; pointer-events: none; white-space: nowrap;
+  font-size: 12px; color: #5ee0e6; text-shadow: 2px 2px 0 #0a0818;
+  animation: floatUp .7s steps(7) forwards;
+}
+.quiz-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.btn-back { background: none; border: none; color: #a79fd0; font-size: 10px; padding: 8px 0; }
+
+/* ---------- 03 Calculating ---------- */
+.screen-calc { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; padding: 12px 0 8px; }
+.calc-head { font-size: clamp(13px, 2.4vw, 18px); color: #ffcf4a; text-shadow: 3px 3px 0 #0a0818; line-height: 1.5; }
+.roulette {
+  width: 208px; height: 208px; display: grid; place-items: center;
+  background: #171334; border: 4px solid #0a0818; box-shadow: inset 0 0 0 4px #3d3678, 6px 6px 0 #0a0818;
+}
+.roulette img { width: 176px; height: 176px; image-rendering: pixelated; }
+.calc-bar {
+  width: 100%; max-width: 440px; display: grid; grid-template-columns: repeat(24, 1fr);
+  gap: 3px; padding: 5px; background: #0a0818;
+}
+.calc-bar div { height: 18px; background: #2d2858; }
+.calc-line { font-size: 20px; color: #a79fd0; }
+
+/* ---------- 04 Result ---------- */
+.screen-result { display: flex; flex-direction: column; gap: 26px; }
+.result-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 30px; align-items: center; }
+.portrait-col { display: flex; flex-direction: column; align-items: center; }
+.portrait {
+  position: relative; width: 100%; max-width: 290px; aspect-ratio: 1; overflow: hidden;
+  display: grid; place-items: center;
+  background: #171334; border: 4px solid #0a0818; box-shadow: inset 0 0 0 4px #3d3678, 6px 6px 0 #0a0818;
+  animation: popIn .4s steps(4);
+}
+.glow { position: absolute; }
+.glow-1 { width: 76%; height: 76%; opacity: .18; }
+.glow-2 { width: 56%; height: 56%; opacity: .22; }
+.floor { position: absolute; left: 0; right: 0; bottom: 0; height: 14%; background: #0f0c24; border-top: 4px solid #3d3678; }
+.portrait img { position: relative; width: 86%; image-rendering: pixelated; animation: bob .8s steps(2) infinite; }
+.match {
+  margin-top: -16px; position: relative; font-size: 11px; padding: 9px 12px;
+  background: #ffcf4a; color: #1a1530; border: 4px solid #0a0818; box-shadow: 4px 4px 0 #0a0818;
+}
+.hero-info { display: flex; flex-direction: column; gap: 14px; }
+.you-are { font-size: 11px; color: #ffcf4a; }
+.hero-name {
+  margin: 0; font-weight: 400; font-size: clamp(24px, 4.4vw, 34px); line-height: 1.25;
+  color: #ef4b5a; text-shadow: 0 4px 0 #9e2433, 0 7px 0 #0a0818;
+}
+.hero-title { font-size: 23px; font-weight: 700; color: #5ee0e6; }
+.hero-blurb { margin: 0; font-size: 19px; line-height: 1.45; text-wrap: pretty; }
+.stats { background: #171334; border: 4px solid #0a0818; padding: 18px; display: flex; flex-direction: column; gap: 13px; }
+.stat { display: grid; grid-template-columns: minmax(90px, 128px) minmax(0, 1fr) 30px; align-items: center; gap: 12px; }
+.stat-label { font-size: 9px; color: #f3e9d2; }
+.stat-blocks { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+.stat-blocks div { height: 16px; background: #2d2858; box-shadow: inset 0 -4px 0 rgba(0,0,0,.25); }
+.stat-value { font-size: 11px; color: #ffcf4a; text-align: right; }
+.runner-up { font-size: 9px; color: #a79fd0; line-height: 1.6; }
+.friend {
+  display: flex; align-items: center; gap: 14px;
+  background: #171334; border: 4px solid #0a0818; padding: 12px 14px;
+}
+.friend img {
+  flex: none; width: 60px; height: 60px; image-rendering: pixelated;
+  background: #241f4a; border: 3px solid #0a0818;
+}
+.friend-text { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.friend-k { font-size: 9px; color: #a79fd0; }
+.friend-name { font-size: 12px; color: #5ee0e6; line-height: 1.4; }
+.friend-note { font-size: 17px; line-height: 1.3; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn-retake { flex: 1 1 100%; font-size: 14px; padding: 18px 16px; display: flex; justify-content: center; gap: 12px; }
+
+/* ---------- Overlays ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 10;
+  font-size: 11px; padding: 12px 16px; white-space: nowrap;
+  background: #5ee0e6; color: #0a0818; border: 4px solid #0a0818; box-shadow: 4px 4px 0 #0a0818;
+}
+.credit {
+  position: fixed; right: 14px; bottom: 12px; z-index: 15; pointer-events: none;
+  font-size: 10px; letter-spacing: 1px; color: #f3e9d2; opacity: .75; text-shadow: 2px 2px 0 #0a0818;
+}
+.scanlines {
+  position: fixed; inset: 0; pointer-events: none; z-index: 20;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.16) 0 2px, transparent 2px 4px);
+}
+[hidden] { display: none !important; }
+
+/* ---------- Pointer & motion ---------- */
+/* Hover lift only on real pointers, so it doesn't stick after a tap on phones. */
+@media (hover: hover) {
+  .btn-sfx:hover, .btn-back:hover { color: #ffcf4a; }
+  .btn-primary:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: inset -4px -4px 0 #c9971f, inset 4px 4px 0 #ffe9a3, 8px 8px 0 #0a0818;
+  }
+  .btn-secondary:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #0a0818; color: #ffcf4a; }
+  .answer:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #0a0818; border-color: #ffcf4a; }
+}
+/* Pressed state: the button sinks into its shadow. */
+.btn-primary:active {
+  transform: translate(3px, 3px);
+  box-shadow: inset -4px -4px 0 #c9971f, inset 4px 4px 0 #ffe9a3, 3px 3px 0 #0a0818;
+}
+.btn-secondary:active, .answer:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #0a0818; }
+.btn-sfx:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #0a0818; }
+
+/* Keyboard hints are noise on touch-only devices. */
+@media (hover: none) and (pointer: coarse) { .kbd-hint { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .parade-track, .parade-item img, .blink, .portrait, .portrait img { animation: none; }
+}
